@@ -1,7 +1,6 @@
 
 plugins {
   java
-  application
   id("org.springframework.boot") version "2.1.8.RELEASE"
   id("io.spring.dependency-management") version "1.0.8.RELEASE"
 }
@@ -36,9 +35,6 @@ dependencies {
 
   annotationProcessor("org.projectlombok:lombok")
 
-  // This dependency is used by the application.
-  implementation("com.google.guava:guava:28.0-jre")
-
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
 
@@ -48,7 +44,10 @@ dependencies {
 
 }
 
-application {
-    // Define the main class for the application
-    mainClassName = "com.drypot.App"
+tasks.bootJar {
+  mainClassName = "com.drypot.App"
+}
+
+tasks.bootRun {
+  main = "com.drypot.App"
 }
