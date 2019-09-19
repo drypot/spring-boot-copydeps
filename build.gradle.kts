@@ -1,8 +1,9 @@
 
 plugins {
-  java
-  id("org.springframework.boot") version "2.1.8.RELEASE"
+  id("org.springframework.boot") version "2.1.8.RELEASE" apply false
   id("io.spring.dependency-management") version "1.0.8.RELEASE"
+  java
+  application
 }
 
 group = "com.drypot"
@@ -25,29 +26,30 @@ repositories {
 
 dependencyManagement {
   imports {
-    mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.8.RELEASE")
+    mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
   }
 }
 
 dependencies {
-  compile("org.projectlombok:lombok")
-  compile("org.springframework.boot:spring-boot-starter-webflux")
-
-  annotationProcessor("org.projectlombok:lombok")
-
   implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
   implementation("org.springframework.boot:spring-boot-starter-webflux")
-
-  //testImplementation("junit:junit:4.12")
+  compileOnly("org.projectlombok:lombok")
+  annotationProcessor("org.projectlombok:lombok")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("io.projectreactor:reactor-test")
-
 }
 
-tasks.bootJar {
+application {
+  // Define the main class for the application
   mainClassName = "com.drypot.App"
 }
 
-tasks.bootRun {
-  main = "com.drypot.App"
+tasks.register<Delete>("deleteDeps") {
+  delete("deps")
+}
+
+tasks.register<Copy>("copyDeps") {
+  dependsOn("deleteDeps")
+  from(configurations.default)
+  into("deps")
 }
