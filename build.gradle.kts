@@ -40,7 +40,6 @@ dependencies {
 }
 
 application {
-  // Define the main class for the application
   mainClassName = "com.drypot.App"
 }
 
