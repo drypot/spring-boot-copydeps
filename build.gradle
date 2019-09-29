@@ -6,9 +6,9 @@ plugins {
   id "application"
 }
 
-group = 'com.drypot'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+group = "com.drypot"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "11"
 
 configurations {
   compileOnly {
@@ -37,12 +37,21 @@ dependencies {
 
 mainClassName = "com.drypot.App"
 
-task deleteDeps (type: Delete) {
-  delete "deps"
+task deleteLibs (type: Delete) {
+  delete "libs"
 }
 
-task copyDeps (type: Copy) {
-  dependsOn "deleteDeps"
-  from configurations.default
-  into "deps"
+task downloadLibs (type: Copy) {
+  dependsOn "deleteLibs"
+  from configurations.runtime
+  into "libs"
+}
+
+task displayJars {
+  doLast {
+    configurations.default.each {
+      println it.name
+    }
+    //println "${configurations.default.collect { File f -> f.name }}"
+  }
 }
